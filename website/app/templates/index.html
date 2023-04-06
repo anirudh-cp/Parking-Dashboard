@@ -1,0 +1,140 @@
+<!DOCTYPE html>
+<html>
+  <head>
+    <!-- For displaying current time if required. -->
+    {{ moment.include_moment() }}
+
+    <meta charset="utf-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <!-- load MUI -->
+    <link
+      href="//cdn.muicss.com/mui-0.10.3/css/mui.min.css"
+      rel="stylesheet"
+      type="text/css"
+    />
+    <script src="//cdn.muicss.com/mui-0.10.3/js/mui.min.js"></script>
+    <title>Parking Dashboard</title>
+
+    <style>
+      :root {
+        --headerHeight: 69px;
+        --footerHeight: 35px;
+      }
+
+      html,
+      body {
+        height: 100%;
+      }
+
+      #content-wrapper {
+        min-height: calc(100% - var(--headerHeight) - var(--footerHeight));
+        box-sizing: border-box;
+      }
+
+      footer {
+        height: 35px;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        box-sizing: border-box;
+        background-color: #eee;
+        border-top: 1px solid #e0e0e0;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div class="mui-appbar">
+      <div class="mui-container">
+        <table width="100%">
+          <tr style="vertical-align: middle">
+            <td class="mui--appbar-height">
+              <div class="mui--text-headline">Parking Dashboard</div>
+            </td>
+
+            <!-- Display last updated time if required. -->
+            <!-- 
+              <td class="mui--appbar-height">
+              <div class="mui--text-subhead" style="display: flex; justify-content: flex-end;">
+                <p style="margin: 0;">
+                Last updated on: {{ moment().format('Do MMMM YYYY, h:mm:ss A') }}.
+              </p>
+              </div>
+            </td> 
+          --></tr>
+        </table>
+      </div>
+    </div>
+
+    <div id="content-wrapper" class="mui-container" style="padding-top: 5px">
+      <!-- Loop through all keys which give the heading name. 
+      The values are dictionaries which describe the slot number and status. 
+      Based upon status render appropriate element. -->
+
+      {% for key, value in result.items() %}
+
+      <div style="margin-top: 30px">
+        <div class="mui--text-display1" style="margin: 0px 0px">{{ key }}</div>
+
+        <div class="mui-divider" style="margin: 10px 0 15px"></div>
+
+        <div class="mui-row">
+          {% for item in value %} {% if item.status %}
+          <div class="mui-col-xs-6 mui-col-md-2">
+            <div
+              class="mui-panel"
+              style="
+                margin: 10px;
+                height: 50px;
+                background-color: lightcoral;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+              "
+            >
+              <div class="mui--text-display1" style="margin: 0; padding: 0">
+                {{ item.slot }}
+              </div>
+            </div>
+          </div>
+
+          {% else %}
+
+          <div class="mui-col-xs-6 mui-col-md-2">
+            <div
+              class="mui-panel"
+              style="
+                margin: 10px;
+                height: 50px;
+                background-color: lightgreen;
+                text-align: center;
+                display: flex;
+                justify-content: center;
+              "
+            >
+              <div class="mui--text-display1" style="margin: 0; padding: 0">
+                {{ item.slot }}
+              </div>
+            </div>
+          </div>
+          {% endif %} {% endfor %}
+        </div>
+        <!-- End all slot details for a heading here-->
+      </div>
+      <!-- End of one builing componenent-->
+
+      {% endfor %}
+    </div>
+
+    <footer>
+      <div class="mui-container mui--text-center">
+        Copyright &copy;
+        <script>
+          document.write(new Date().getFullYear());
+        </script>
+        VIT-Chennai All Rights Reserved.
+      </div>
+    </footer>
+  </body>
+</html>
