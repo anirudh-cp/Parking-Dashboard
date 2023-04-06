@@ -1,0 +1,1 @@
+web: gunicorn --chdir ./website wsgi:app --timeout 120
