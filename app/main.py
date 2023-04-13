@@ -26,7 +26,8 @@ moment = Moment(app)
 
 @app.route('/', methods=['GET', ])
 def home():
-    records = db['slots'].find().sort([("building", pymongo.ASCENDING), ("slot", pymongo.ASCENDING)])
+    records = db['slots'].find().sort(
+        [("building", pymongo.ASCENDING), ("slot", pymongo.ASCENDING)])
     data = json.loads(json_util.dumps(records))
 
     result = {}
@@ -45,9 +46,10 @@ def slots_manager(building=None, slot=None):
     if request.method == 'GET':
         # Get all slots. If no data return 404, normal: 200
 
-        records = db['slots'].find().sort([("building", pymongo.ASCENDING), ("slot", pymongo.ASCENDING)])
+        records = db['slots'].find().sort(
+            [("building", pymongo.ASCENDING), ("slot", pymongo.ASCENDING)])
         records = json_util.dumps(records)
-        
+
         if len(json.loads(records)):
             return make_response(records, 200)
         else:
@@ -57,7 +59,7 @@ def slots_manager(building=None, slot=None):
         # Add new slot. If any errors: 400, normal: 201
 
         data = {'building': building, 'slot': slot}
-        
+
         if db['slots'].count_documents(data):
             return {'error': 'Record with same building and slots exists'}, 400
         else:
@@ -86,7 +88,7 @@ def status_manager(building=None, slot=None):
         # Set slot as parked. If record not found return 404, normal: 200
 
         data = {'building': building, 'slot': slot}
-        
+
         if db['slots'].count_documents(data):
             records = db['slots'].update_one(data, {"$set": {"status": 1}})
             if records.modified_count > 0:
@@ -109,3 +111,34 @@ def status_manager(building=None, slot=None):
                 return {"error": "Updation error"}, 400
         else:
             return {"error": "Records not found"}, 404
+
+
+@app.route("/api/slots/addParking/<building>/<slot>", methods=['GET', ])
+def add_manager(building=None, slot=None):
+    # Set slot as parked. If record not found return 404, normal: 200
+
+    data = {'building': building, 'slot': slot}
+
+    if db['slots'].count_documents(data):
+        records = db['slots'].update_one(data, {"$set": {"status": 1}})
+        if records.modified_count > 0:
+            return data, 200
+        else:
+            return {"error": "Updation error"}, 400
+    else:
+        return {"error": "Records not found"}, 404
+
+
+@app.route("/api/slots/removeParking/<building>/<slot>", methods=['GET', ])
+def remove_manager(building=None, slot=None):
+
+    data = {'building': building, 'slot': slot}
+
+    if db['slots'].count_documents(data):
+        records = db['slots'].update_one(data, {"$set": {"status": 0}})
+        if records.modified_count > 0:
+            return data, 200
+        else:
+            return {"error": "Updation error"}, 400
+    else:
+        return {"error": "Records not found"}, 404
