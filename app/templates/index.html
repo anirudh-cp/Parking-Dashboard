@@ -16,6 +16,13 @@
     <script src="//cdn.muicss.com/mui-0.10.3/js/mui.min.js"></script>
     <title>Parking Dashboard</title>
 
+    <script>
+      function timedRefresh(timeoutPeriod) {
+        setTimeout("location.reload(true);",timeoutPeriod);
+      }      
+      window.onload = timedRefresh(20000);
+      </script>
+
     <style>
       :root {
         --headerHeight: 69px;
